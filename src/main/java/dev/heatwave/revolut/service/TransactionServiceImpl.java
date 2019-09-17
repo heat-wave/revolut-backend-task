@@ -2,14 +2,14 @@ package dev.heatwave.revolut.service;
 
 import dev.heatwave.revolut.model.account.Account;
 import dev.heatwave.revolut.model.transaction.Transaction;
-import dev.heatwave.revolut.persistence.MockPersistenceManager;
+import dev.heatwave.revolut.persistence.PersistenceManager;
 
 import java.util.List;
 import java.util.Optional;
 
 public class TransactionServiceImpl implements TransactionService {
     private AccountService accountService;
-    private MockPersistenceManager persistenceManager;
+    private PersistenceManager persistenceManager;
 
     @Override
     public Transaction createTransaction(Transaction transaction) {
@@ -28,7 +28,6 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         Transaction result = new Transaction(sender.get().getAccountId(), recipient.get().getAccountId(), transaction.getAmount());
-        persistenceManager.save(result);
 
         //end transaction
         return null;
