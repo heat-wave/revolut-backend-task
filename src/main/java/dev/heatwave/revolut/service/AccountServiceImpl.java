@@ -35,8 +35,10 @@ public class AccountServiceImpl implements AccountService {
         final EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
-        Root<Account> from = criteriaQuery.from(Account.class);
-        criteriaQuery.select(from).where(criteriaBuilder.equal(from.get("accountId"), accountId));
+
+        Root<Account> root = criteriaQuery.from(Account.class);
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(root.get("accountId"), accountId));
         TypedQuery<Account> typedQuery = entityManager.createQuery(criteriaQuery);
 
         Optional<Account> result = typedQuery

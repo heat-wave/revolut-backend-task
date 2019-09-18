@@ -23,6 +23,12 @@ public class Account {
         this.balance = balance;
     }
 
+    private Account(long accountId, String accountHolderName, BigDecimal balance) {
+        this.accountId = accountId;
+        this.accountHolderName = accountHolderName;
+        this.balance = balance;
+    }
+
     public Account() {
     }
 
@@ -30,32 +36,47 @@ public class Account {
         return accountId;
     }
 
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
-    }
-
     public String getAccountHolderName() {
         return accountHolderName;
-    }
-
-    public void setAccountHolderName(String accountHolderName) {
-        this.accountHolderName = accountHolderName;
     }
 
     public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    public AccountBuilder toBuilder() {
+        return AccountBuilder.builder()
+                .accountId(this.accountId)
+                .accountHolderName(this.accountHolderName)
+                .balance(this.balance);
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "accountId=" + accountId +
-                ", accountHolderName='" + accountHolderName + '\'' +
-                ", balance=" + balance +
-                '}';
+    public static class AccountBuilder {
+        private long accountId;
+        private String accountHolderName;
+        private BigDecimal balance;
+
+        public static AccountBuilder builder() {
+            return new AccountBuilder();
+        }
+
+        public AccountBuilder accountId(long accountId) {
+            this.accountId = accountId;
+            return this;
+        }
+
+        public AccountBuilder accountHolderName(String accountHolderName) {
+            this.accountHolderName = accountHolderName;
+            return this;
+        }
+
+        public AccountBuilder balance(BigDecimal balance) {
+            this.balance = balance;
+            return this;
+        }
+
+        public Account build() {
+            return new Account(accountId, accountHolderName, balance);
+        }
     }
 }

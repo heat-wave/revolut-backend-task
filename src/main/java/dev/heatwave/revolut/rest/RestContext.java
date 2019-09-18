@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Service;
 
+import static spark.Spark.port;
+
 public class RestContext {
 
     private static final Logger logger = LoggerFactory.getLogger(RestContext.class);
@@ -15,11 +17,12 @@ public class RestContext {
 
     public RestContext(int port, String basePath) {
         this.basePath = basePath;
-        spark = Service.ignite().port(port);
+        this.spark = Service.ignite();
+        port(port);
     }
 
     public void addEndpoint(Endpoint endpoint) {
         endpoint.configure(spark, basePath);
-        logger.info("REST endpoints registered for {}.", endpoint.getClass().getSimpleName());
+        logger.debug("REST endpoint registered for {}.", endpoint.getClass().getSimpleName());
     }
 }
