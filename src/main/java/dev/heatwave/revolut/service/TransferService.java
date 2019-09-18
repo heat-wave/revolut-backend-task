@@ -1,6 +1,6 @@
 package dev.heatwave.revolut.service;
 
-import dev.heatwave.revolut.model.transfer.Transfer;
+import dev.heatwave.revolut.model.Transfer;
 
 import java.util.List;
 import java.util.Optional;

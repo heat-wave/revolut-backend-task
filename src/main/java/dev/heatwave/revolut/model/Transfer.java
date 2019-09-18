@@ -1,4 +1,4 @@
-package dev.heatwave.revolut.model.transfer;
+package dev.heatwave.revolut.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

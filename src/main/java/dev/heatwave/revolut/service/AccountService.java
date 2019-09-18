@@ -1,6 +1,6 @@
 package dev.heatwave.revolut.service;
 
-import dev.heatwave.revolut.model.account.Account;
+import dev.heatwave.revolut.model.Account;
 
 import java.util.Optional;
 

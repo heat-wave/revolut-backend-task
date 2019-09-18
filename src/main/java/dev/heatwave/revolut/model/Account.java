@@ -1,4 +1,4 @@
-package dev.heatwave.revolut.model.account;
+package dev.heatwave.revolut.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,18 +15,20 @@ public class Account {
 
     private String accountHolderName;
     private BigDecimal balance;
-    //private Currency currency;
+    private Currency currency;
 
 
-    public Account(String accountHolderName, BigDecimal balance) {
+    public Account(String accountHolderName, BigDecimal balance, Currency currency) {
         this.accountHolderName = accountHolderName;
         this.balance = balance;
+        this.currency = currency;
     }
 
-    private Account(long accountId, String accountHolderName, BigDecimal balance) {
+    private Account(long accountId, String accountHolderName, BigDecimal balance, Currency currency) {
         this.accountId = accountId;
         this.accountHolderName = accountHolderName;
         this.balance = balance;
+        this.currency = currency;
     }
 
     public Account() {
@@ -44,17 +46,23 @@ public class Account {
         return balance;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
     public AccountBuilder toBuilder() {
         return AccountBuilder.builder()
                 .accountId(this.accountId)
                 .accountHolderName(this.accountHolderName)
-                .balance(this.balance);
+                .balance(this.balance)
+                .currency(this.currency);
     }
 
     public static class AccountBuilder {
         private long accountId;
         private String accountHolderName;
         private BigDecimal balance;
+        private Currency currency;
 
         public static AccountBuilder builder() {
             return new AccountBuilder();
@@ -75,8 +83,13 @@ public class Account {
             return this;
         }
 
+        public AccountBuilder currency(Currency currency) {
+            this.currency = currency;
+            return this;
+        }
+
         public Account build() {
-            return new Account(accountId, accountHolderName, balance);
+            return new Account(accountId, accountHolderName, balance, currency);
         }
     }
 }

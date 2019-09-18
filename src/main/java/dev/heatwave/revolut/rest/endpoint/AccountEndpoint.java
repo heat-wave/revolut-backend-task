@@ -2,9 +2,9 @@ package dev.heatwave.revolut.rest.endpoint;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dev.heatwave.revolut.model.account.Account;
-import dev.heatwave.revolut.model.transfer.Transfer;
-import dev.heatwave.revolut.rest.ErrorResponse;
+import dev.heatwave.revolut.exception.ResourceNotFoundException;
+import dev.heatwave.revolut.model.Account;
+import dev.heatwave.revolut.model.Transfer;
 import dev.heatwave.revolut.service.AccountService;
 import dev.heatwave.revolut.service.TransferService;
 import org.eclipse.jetty.http.HttpStatus;
@@ -49,13 +49,12 @@ public class AccountEndpoint implements Endpoint {
         final long accountId = Long.parseLong(request.params("id"));
         final Optional<Account> result = accountService.getAccountById(accountId);
 
-        if (result.isPresent()) {
+        if (!result.isPresent()) {
+            throw new ResourceNotFoundException("Account with id %d not found", accountId);
+        } else {
             response.status(HttpStatus.OK_200);
             response.type("application/json");
             return gson.toJson(result.get());
-        } else {
-            response.status(HttpStatus.NOT_FOUND_404);
-            return new ErrorResponse("Account with id %d not found", accountId);
         }
     });
 
