@@ -7,6 +7,7 @@ import dev.heatwave.revolut.model.Account;
 import dev.heatwave.revolut.model.Transfer;
 import dev.heatwave.revolut.service.AccountService;
 import dev.heatwave.revolut.service.TransferService;
+import org.apache.commons.lang.math.NumberUtils;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Route;
 import spark.Service;
@@ -46,7 +47,7 @@ public class AccountEndpoint implements Endpoint {
 
     private final Route getAccount = ((request, response) -> {
 
-        final long accountId = Long.parseLong(request.params("id"));
+        final Long accountId = NumberUtils.createLong(request.params("id"));
         final Optional<Account> result = accountService.getAccountById(accountId);
 
         if (!result.isPresent()) {
@@ -60,7 +61,7 @@ public class AccountEndpoint implements Endpoint {
 
     private final Route getAccountTransfers = ((request, response) -> {
 
-        final long accountId = Long.parseLong(request.params("id"));
+        final Long accountId = NumberUtils.createLong(request.params("id"));
         final List<Transfer> result = transferService.getTransfersByAccountId(accountId);
 
         response.status(HttpStatus.OK_200);

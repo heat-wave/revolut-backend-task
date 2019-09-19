@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface TransferService {
     public Transfer createTransfer(Transfer transfer);
 
-    public Optional<Transfer> getTransferById(long transferId);
+    public Optional<Transfer> getTransferById(Long transferId);
 
-    public List<Transfer> getTransfersByAccountId(long accountId);
+    public List<Transfer> getTransfersByAccountId(Long accountId);
 }

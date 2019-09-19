@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface AccountService {
     public Account createAccount(Account account);
 
-    public Optional<Account> getAccountById(long accountId);
+    public Optional<Account> getAccountById(Long accountId);
 
     //update state
 

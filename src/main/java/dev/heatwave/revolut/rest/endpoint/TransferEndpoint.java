@@ -41,7 +41,7 @@ public class TransferEndpoint implements Endpoint {
 
     private final Route getTransfer = ((request, response) -> {
 
-        final long transferId = Long.parseLong(request.params("id"));
+        final Long transferId = Long.parseLong(request.params("id"));
         final Optional<Transfer> result = transferService.getTransferById(transferId);
 
         if (!result.isPresent()) {

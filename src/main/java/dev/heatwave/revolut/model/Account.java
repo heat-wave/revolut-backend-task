@@ -1,9 +1,6 @@
 package dev.heatwave.revolut.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -11,20 +8,15 @@ import java.math.BigDecimal;
 public class Account {
     @Id
     @GeneratedValue
-    private long accountId;
+    private Long accountId;
 
     private String accountHolderName;
     private BigDecimal balance;
+
+    @Enumerated(EnumType.STRING)
     private Currency currency;
 
-
-    public Account(String accountHolderName, BigDecimal balance, Currency currency) {
-        this.accountHolderName = accountHolderName;
-        this.balance = balance;
-        this.currency = currency;
-    }
-
-    private Account(long accountId, String accountHolderName, BigDecimal balance, Currency currency) {
+    private Account(Long accountId, String accountHolderName, BigDecimal balance, Currency currency) {
         this.accountId = accountId;
         this.accountHolderName = accountHolderName;
         this.balance = balance;
@@ -34,7 +26,7 @@ public class Account {
     public Account() {
     }
 
-    public long getAccountId() {
+    public Long getAccountId() {
         return accountId;
     }
 
@@ -59,7 +51,7 @@ public class Account {
     }
 
     public static class AccountBuilder {
-        private long accountId;
+        private Long accountId;
         private String accountHolderName;
         private BigDecimal balance;
         private Currency currency;
@@ -68,7 +60,7 @@ public class Account {
             return new AccountBuilder();
         }
 
-        public AccountBuilder accountId(long accountId) {
+        public AccountBuilder accountId(Long accountId) {
             this.accountId = accountId;
             return this;
         }

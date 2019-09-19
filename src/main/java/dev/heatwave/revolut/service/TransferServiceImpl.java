@@ -13,10 +13,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class TransferServiceImpl implements TransferService {
+
     private final AccountService accountService;
     private final EntityManagerFactory entityManagerFactory = PersistenceManager.getEntityManagerFactory();
 
@@ -45,7 +47,7 @@ public class TransferServiceImpl implements TransferService {
             entityManager.getTransaction().rollback();
             throw new ForbiddenOperationException("Currency conversion between accounts is not supported in this API version");
         }
-        if (transfer.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (transfer.getAmount() == null || transfer.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             entityManager.getTransaction().rollback();
             throw new ForbiddenOperationException("Transaction amount must be positive");
         }
@@ -71,7 +73,11 @@ public class TransferServiceImpl implements TransferService {
     }
 
     @Override
-    public Optional<Transfer> getTransferById(long transferId) {
+    public Optional<Transfer> getTransferById(Long transferId) {
+
+        if (transferId == null) {
+            return Optional.empty();
+        }
 
         final EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -91,7 +97,11 @@ public class TransferServiceImpl implements TransferService {
     }
 
     @Override
-    public List<Transfer> getTransfersByAccountId(long accountId) {
+    public List<Transfer> getTransfersByAccountId(Long accountId) {
+
+        if (accountId == null) {
+            return Collections.emptyList();
+        }
 
         final EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

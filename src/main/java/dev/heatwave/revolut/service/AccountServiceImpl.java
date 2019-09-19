@@ -17,12 +17,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AccountServiceImpl implements AccountService {
+
     private final EntityManagerFactory entityManagerFactory = PersistenceManager.getEntityManagerFactory();
 
     public AccountServiceImpl() {}
 
     @Override
     public Account createAccount(Account account) {
+
+        if (account == null) {
+            throw new ForbiddenOperationException("Account must not be null");
+        }
         if (account.getBalance().compareTo(BigDecimal.ZERO) < 0) {
             throw new ForbiddenOperationException("Account starting balance must not be negative");
         }
@@ -44,7 +49,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Account> getAccountById(long accountId) {
+    public Optional<Account> getAccountById(Long accountId) {
+
+        if (accountId == null) {
+            return Optional.empty();
+        }
+
         final EntityManager entityManager = entityManagerFactory.createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);

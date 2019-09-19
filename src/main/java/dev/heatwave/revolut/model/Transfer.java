@@ -11,15 +11,13 @@ import java.math.BigDecimal;
 public class Transfer {
     @Id
     @GeneratedValue
-    private long transferId;
+    private Long transferId;
 
-    private long senderId;
-    private long recipientId;
+    private Long senderId;
+    private Long recipientId;
     private BigDecimal amount;
-    //private Currency currency;
 
-
-    public Transfer(long senderId, long recipientId, BigDecimal amount) {
+    public Transfer(Long senderId, Long recipientId, BigDecimal amount) {
         this.senderId = senderId;
         this.recipientId = recipientId;
         this.amount = amount;
@@ -28,15 +26,15 @@ public class Transfer {
     public Transfer() {
     }
 
-    public long getTransferId() {
+    public Long getTransferId() {
         return transferId;
     }
 
-    public long getSenderId() {
+    public Long getSenderId() {
         return senderId;
     }
 
-    public long getRecipientId() {
+    public Long getRecipientId() {
         return recipientId;
     }
 
