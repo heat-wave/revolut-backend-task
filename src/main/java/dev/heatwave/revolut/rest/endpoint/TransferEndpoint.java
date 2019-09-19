@@ -36,6 +36,8 @@ public class TransferEndpoint implements Endpoint {
 
         final Transfer transfer = gson.fromJson(request.body(), Transfer.class);
         final Transfer result = transferService.createTransfer(transfer);
+
+        response.status(HttpStatus.OK_200);
         response.type("application/json");
         return gson.toJson(result);
     });
