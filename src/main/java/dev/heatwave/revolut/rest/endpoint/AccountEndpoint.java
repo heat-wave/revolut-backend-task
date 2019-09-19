@@ -42,6 +42,8 @@ public class AccountEndpoint implements Endpoint {
 
         final Account account = gson.fromJson(request.body(), Account.class);
         final Account result = accountService.createAccount(account);
+
+        response.status(HttpStatus.CREATED_201);
         response.type("application/json");
         return gson.toJson(result);
     });
