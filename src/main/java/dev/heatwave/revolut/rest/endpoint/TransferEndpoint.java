@@ -2,6 +2,7 @@ package dev.heatwave.revolut.rest.endpoint;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.inject.Inject;
 import dev.heatwave.revolut.exception.ResourceNotFoundException;
 import dev.heatwave.revolut.model.Transfer;
 import dev.heatwave.revolut.service.TransferService;
@@ -16,12 +17,12 @@ import static spark.Spark.post;
 
 public class TransferEndpoint implements Endpoint {
 
+    @Inject
     private TransferService transferService;
 
     private final Gson gson = new GsonBuilder().create();
 
-    public TransferEndpoint(TransferService transferService) {
-        this.transferService = transferService;
+    public TransferEndpoint() {
     }
 
 

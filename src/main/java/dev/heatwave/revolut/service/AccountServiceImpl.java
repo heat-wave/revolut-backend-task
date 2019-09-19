@@ -1,5 +1,6 @@
 package dev.heatwave.revolut.service;
 
+import com.google.inject.Singleton;
 import dev.heatwave.revolut.exception.ForbiddenOperationException;
 import dev.heatwave.revolut.model.Account;
 import dev.heatwave.revolut.model.Currency;
@@ -16,11 +17,12 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Singleton
 public class AccountServiceImpl implements AccountService {
 
     private final EntityManagerFactory entityManagerFactory = PersistenceManager.getEntityManagerFactory();
 
-    public AccountServiceImpl() {}
+    AccountServiceImpl() {}
 
     @Override
     public Account createAccount(Account account) {

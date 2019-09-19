@@ -1,7 +1,9 @@
 package dev.heatwave.revolut.service;
 
-import dev.heatwave.revolut.exception.ResourceNotFoundException;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import dev.heatwave.revolut.exception.ForbiddenOperationException;
+import dev.heatwave.revolut.exception.ResourceNotFoundException;
 import dev.heatwave.revolut.model.Account;
 import dev.heatwave.revolut.model.Transfer;
 import dev.heatwave.revolut.persistence.PersistenceManager;
@@ -17,12 +19,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Singleton
 public class TransferServiceImpl implements TransferService {
 
-    private final AccountService accountService;
+    private AccountService accountService;
+
     private final EntityManagerFactory entityManagerFactory = PersistenceManager.getEntityManagerFactory();
 
-    public TransferServiceImpl(AccountService accountService) {
+    @Inject TransferServiceImpl(AccountService accountService) {
         this.accountService = accountService;
     }
 
