@@ -3,7 +3,6 @@ package dev.heatwave.revolut.service;
 import dev.heatwave.revolut.exception.ForbiddenOperationException;
 import dev.heatwave.revolut.model.Account;
 import dev.heatwave.revolut.model.Currency;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AccountServiceImplTest {
 

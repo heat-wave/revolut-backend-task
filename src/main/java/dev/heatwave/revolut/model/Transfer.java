@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "Transfer")
@@ -20,7 +21,7 @@ public class Transfer {
     public Transfer(Long senderId, Long recipientId, BigDecimal amount) {
         this.senderId = senderId;
         this.recipientId = recipientId;
-        this.amount = amount;
+        this.amount = amount.setScale(2, RoundingMode.UNNECESSARY);
     }
 
     public Transfer() {

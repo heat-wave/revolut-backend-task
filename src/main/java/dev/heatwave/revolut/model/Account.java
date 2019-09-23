@@ -2,6 +2,7 @@ package dev.heatwave.revolut.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "Account")
@@ -19,8 +20,10 @@ public class Account {
     private Account(Long accountId, String accountHolderName, BigDecimal balance, Currency currency) {
         this.accountId = accountId;
         this.accountHolderName = accountHolderName;
-        this.balance = balance;
         this.currency = currency;
+        if (balance != null) {
+            this.balance = balance.setScale(2, RoundingMode.UNNECESSARY);
+        }
     }
 
     public Account() {

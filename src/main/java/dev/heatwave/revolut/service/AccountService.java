@@ -8,8 +8,4 @@ public interface AccountService {
     public Account createAccount(Account account);
 
     public Optional<Account> getAccountById(Long accountId);
-
-    //update state
-
-    //update balance?
 }

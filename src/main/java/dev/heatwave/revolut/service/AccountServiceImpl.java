@@ -30,8 +30,8 @@ public class AccountServiceImpl implements AccountService {
         if (account == null) {
             throw new ForbiddenOperationException("Account must not be null");
         }
-        if (account.getBalance().compareTo(BigDecimal.ZERO) < 0) {
-            throw new ForbiddenOperationException("Account starting balance must not be negative");
+        if (account.getBalance() == null || account.getBalance().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ForbiddenOperationException("Account starting balance must exist and not be negative");
         }
         if (account.getCurrency() == null) {
             throw new ForbiddenOperationException("No valid account currency specified. Supported currencies are: %s.",
