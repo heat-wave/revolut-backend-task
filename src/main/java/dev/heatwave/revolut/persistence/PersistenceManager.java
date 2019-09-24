@@ -18,4 +18,8 @@ public class PersistenceManager {
 
         return entityManagerFactory;
     }
+
+    public static void clearEntityManagerFactory() {
+        entityManagerFactory = null;
+    }
 }
