@@ -12,17 +12,29 @@ import static spark.Spark.port;
 
 public class RestContext {
 
+    private RestContext() {}
+
     private static final Logger logger = LoggerFactory.getLogger(RestContext.class);
+    private static final String basePath = "/api";
 
-    private final Service spark;
+    private static class SingletonHolder {
+        private static final Service INSTANCE = Service.ignite();
+    }
 
-    private final String basePath;
+    private static Service getInstance() {
+        return RestContext.SingletonHolder.INSTANCE;
+    }
 
-    public RestContext(int port, String basePath) {
-        this.basePath = basePath;
-        this.spark = Service.ignite();
-        port(port);
+    public static void init(int listenPort) {
+        setupExceptionHandling();
+        try {
+            port(listenPort);
+        } catch (IllegalStateException exception) {
+            logger.warn("Port mapping failed", exception);
+        }
+    }
 
+    private static void setupExceptionHandling() {
         exception(BaseServiceException.class, (exception, request, response) -> {
             response.status(exception.getStatusCode());
             response.body(exception.getMessage());
@@ -33,8 +45,8 @@ public class RestContext {
         });
     }
 
-    public void addEndpoint(Endpoint endpoint) {
-        endpoint.configure(spark, basePath);
+    public static void addEndpoint(Endpoint endpoint) {
+        endpoint.configure(getInstance(), basePath);
         logger.debug("REST endpoint registered for {}.", endpoint.getClass().getSimpleName());
     }
 }

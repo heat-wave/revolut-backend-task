@@ -1,20 +1,10 @@
 package dev.heatwave.revolut.functional;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import dev.heatwave.revolut.configuration.GuiceConfiguration;
 import dev.heatwave.revolut.model.Account;
 import dev.heatwave.revolut.model.Currency;
-import dev.heatwave.revolut.persistence.PersistenceManager;
-import dev.heatwave.revolut.rest.RestContext;
-import dev.heatwave.revolut.rest.endpoint.AccountEndpoint;
-import dev.heatwave.revolut.rest.endpoint.TransferEndpoint;
-import dev.heatwave.revolut.util.PropertyResolver;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -26,21 +16,7 @@ import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BI
 import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_INTEGER;
 import static org.hamcrest.Matchers.*;
 
-class AccountAPITest {
-
-    @AfterEach
-    void dropDatabase() {
-        PersistenceManager.clearEntityManagerFactory();
-    }
-
-    @BeforeAll
-    static void setUp() {
-        RestContext context = new RestContext(PropertyResolver.getConfiguration().getInt(PropertyResolver.SERVER_PORT), "/api");
-        Injector injector = Guice.createInjector(new GuiceConfiguration());
-
-        context.addEndpoint(injector.getInstance(AccountEndpoint.class));
-        context.addEndpoint(injector.getInstance(TransferEndpoint.class));
-    }
+class AccountAPITest extends APITest {
 
     @Test
     void when__valid_new_account_posted__then__creates_successfully() {
@@ -94,9 +70,9 @@ class AccountAPITest {
         given()
                 .with().body(payload).contentType(ContentType.JSON)
                 .log().all()
-                .when()
+        .when()
                 .post("/api/account")
-                .then()
+        .then()
                 .statusCode(HttpStatus.BAD_REQUEST_400);
     }
 
@@ -116,19 +92,8 @@ class AccountAPITest {
         final String accountHolderName = "user1";
         final BigDecimal balance = BigDecimal.TEN;
         final Currency currency = Currency.GBP;
-        final Account payload = Account.AccountBuilder.builder()
-                .accountHolderName(accountHolderName)
-                .balance(balance)
-                .currency(currency)
-                .build();
 
-        final Long id = given()
-                .config(RestAssured.config().jsonConfig(jsonConfig().numberReturnType(BIG_DECIMAL)))
-                .with().body(payload)
-                .log().all()
-        .when()
-                .post("/api/account")
-                .jsonPath().getLong("accountId");
+        final Long id = createAccount(accountHolderName, balance, currency);
 
         given()
                 .config(RestAssured.config().jsonConfig(jsonConfig().numberReturnType(BIG_DECIMAL)
@@ -156,5 +121,24 @@ class AccountAPITest {
                 .get("/api/account/{id}", nonExistentId)
         .then()
                 .statusCode(HttpStatus.NOT_FOUND_404);
+    }
+
+    @Test
+    void when__listing_transfers__then_only_users_transfers_shown() {
+        final Long accountId1 = createAccount("user1", BigDecimal.TEN, Currency.GBP);
+        final Long accountId2 = createAccount("user2", BigDecimal.TEN, Currency.GBP);
+        final Long accountId3 = createAccount("user3", BigDecimal.TEN, Currency.GBP);
+        createTransfer(accountId1, accountId2, BigDecimal.ONE);
+        createTransfer(accountId1, accountId3, BigDecimal.ONE);
+        createTransfer(accountId3, accountId1, BigDecimal.ONE);
+
+        given()
+                .with()
+                .log().all()
+        .when()
+                .get("/api/account/{id}/transfers", accountId3)
+        .then()
+                .statusCode(HttpStatus.OK_200)
+                .and().body("size()", is(2));
     }
 }

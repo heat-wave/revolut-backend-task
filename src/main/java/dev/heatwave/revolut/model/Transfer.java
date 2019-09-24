@@ -21,7 +21,9 @@ public class Transfer {
     public Transfer(Long senderId, Long recipientId, BigDecimal amount) {
         this.senderId = senderId;
         this.recipientId = recipientId;
-        this.amount = amount.setScale(2, RoundingMode.UNNECESSARY);
+        if (amount != null) {
+            this.amount = amount.setScale(2, RoundingMode.UNNECESSARY);
+        }
     }
 
     public Transfer() {

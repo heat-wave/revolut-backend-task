@@ -12,10 +12,10 @@ public class Application {
 
     public static void main(String[] args) {
 
-        RestContext context = new RestContext(PropertyResolver.getConfiguration().getInt(PropertyResolver.SERVER_PORT), "/api");
+        RestContext.init(PropertyResolver.getConfiguration().getInt(PropertyResolver.SERVER_PORT));
         Injector injector = Guice.createInjector(new GuiceConfiguration());
 
-        context.addEndpoint(injector.getInstance(AccountEndpoint.class));
-        context.addEndpoint(injector.getInstance(TransferEndpoint.class));
+        RestContext.addEndpoint(injector.getInstance(AccountEndpoint.class));
+        RestContext.addEndpoint(injector.getInstance(TransferEndpoint.class));
     }
 }
